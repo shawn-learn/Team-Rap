@@ -136,7 +136,7 @@ Recommendation:
 
 ## 6. Open questions for Shawn
 
-1. **Target audience:** youth teams (parents are the users), adult rec leagues (players are the users), or both from the start? This shapes the guardian model and privacy defaults.
+1. ~~**Target audience**~~ **Decided 2026-10-29: youth teams first.** Parents and guardians are the primary users, so guardian accounts, privacy for minors, and snack/carpool assignments get MVP polish first. Adult rec leagues follow.
 2. **Monetization:** examples are a free core plus a paid "Pro" team tier, a payment processing margin, per-org pricing for clubs, or a mix.
 3. **SMS:** SMS costs money per message. Should it be free in the MVP, capped, or a paid feature?
 4. **Sports focus:** should the MVP be sport-agnostic, or tuned to one or two sports first?
