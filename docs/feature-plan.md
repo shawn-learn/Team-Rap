@@ -148,7 +148,17 @@ The goal is that a volunteer coach can run a whole season on Team Rap and parent
 - Fundraising and sponsor pages (opt-in, never ads in core flows)
 - Localization and multi-currency
 
-## 5. Architecture direction (leaves room for mobile)
+## 5. Monetization (decided 2026-10-29)
+
+- **MVP (Phase 1):** everything is free, with no ads. The goal is adoption.
+- **Phase 2, payments (main revenue):** a transparent fee on dues and other team payments, at or below Spond's US rate ($1.00 + 3.29%). The team chooses whether it absorbs the fee or passes it to families, and the fee is always shown before checkout (P11).
+- **Phase 2, Pro tier (about $5–9 per team per month, or about $49–79 a year):** only for features that cost Team Rap real money, such as SMS beyond the free allowance, the AI coach assistant, extra storage, and advanced stats. RSVP, availability, roster, chat, and branding stay free forever (P5). Billing is monthly or seasonal, and cancelling takes one click.
+- **Phase 3, league and club plans:** published per-team pricing with no sales call (P9), plus registration fees under the same fee-transparency rule.
+- **Later, optional:** opt-in sponsorship and fundraising pages, never inside core flows and never targeting youth data.
+
+Source: section 8 of `/mnt/project-files/research/market-research.md`.
+
+## 6. Architecture direction (leaves room for mobile)
 
 Recommendation:
 
@@ -161,11 +171,11 @@ Recommendation:
 - **Auth** with token-based sessions that work for both web and native clients.
 - **Privacy** for youth data by design: COPPA awareness, minimal data on minors, and guardian-controlled visibility.
 
-## 6. Open questions for Shawn
+## 7. Open questions for Shawn
 
 1. ~~**Target audience**~~ **Decided 2026-10-29: youth teams first.** Parents and guardians are the primary users, so guardian accounts, privacy for minors, and snack/carpool assignments get MVP polish first. Adult rec leagues follow.
-2. **Monetization:** examples are a free core plus a paid "Pro" team tier, a payment processing margin, per-org pricing for clubs, or a mix.
-3. **SMS:** SMS costs money per message. Should it be free in the MVP, capped, or a paid feature?
+2. ~~**Monetization**~~ **Decided 2026-10-29:** a payments margin plus a small Pro tier, with league plans later. See section 5.
+3. ~~**SMS**~~ **Mostly decided:** email and push are free, and SMS is in Pro, with a small free allowance per team. The exact cap is still to be set.
 4. **Sports focus:** should the MVP be sport-agnostic, or tuned to one or two sports first?
 5. **Geography:** US-only at launch, or international?
 6. **Support commitment:** P12 promises a person replies within one business day. Can you staff that at launch, or should the promise start smaller?
