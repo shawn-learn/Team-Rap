@@ -1,6 +1,6 @@
 # Team Rap: Feature Set Plan
 
-Status: **Draft for review** (2026-10-29). Updated with the [pain-points research](../research/teamsnap-pain-points.md); audience decided: **youth teams first**.
+Status: **Draft for review** (2026-10-29). Updated with the [pain-points research](../research/teamsnap-pain-points.md); audience decided: **youth teams first**; launch sport: **alpine ski racing clubs**.
 
 Team Rap is a team management app in the same space as TeamSnap, and it aims to be clearly better. The MVP is a web app. A native mobile app comes later, so the architecture is API-first from day one.
 
@@ -57,7 +57,7 @@ The root cause behind many of these is that **the club is TeamSnap's customer an
 | P7 | **Zero-friction RSVP.** Reply "yes" or "no" from an email or SMS link without logging in or installing anything. | 2, 6 |
 | P8 | **Same features on every device.** The web app is mobile-first and responsive, and the native app gets the same features. | 7 |
 | P9 | **Public, simple pricing.** No sales call needed for a small league. | 8 |
-| P10 | **Built for the volunteer coach first.** A team is set up in under 5 minutes, and org features stay out of the way until you need them. | 9, 15 |
+| P10 | **Built for volunteer coaches and club admins first.** A club is set up in under 30 minutes, and org features stay out of the way until you need them. | 9, 15 |
 | P11 | **No junk fees, no traps.** The price shown is the price paid, with any fee shown up front. Cancel in one click, choose monthly or seasonal billing, get a warning and a grace period before any lapse, and get prorated refunds. | 10 |
 | P12 | **Support from a real person.** A person replies within one business day through async chat in the app, and a public status page shows outages. | 11 |
 | P13 | **Never take features away.** Changes are opt-in, every feature works on both web and mobile, and teams can export their data anytime. | 12 |
@@ -66,93 +66,105 @@ The root cause behind many of these is that **the club is TeamSnap's customer an
 
 ## 4. Phased scope
 
-### Phase 1: MVP (web, installable PWA)
+### Launch sport: alpine ski racing (decided 2026-10-29)
 
-The goal is that a volunteer coach can run a whole season on Team Rap and parents would rather use it than the group text.
+Shawn's daughter races, and her club is why Shawn dislikes TeamSnap. TeamSnap is built around a team that plays games against opponents. A ski club works differently:
+
+- **The unit is a club, not a team.** One club runs several programs and training groups by age class (U10, U12, U14, U16, U19/FIS, plus devo and masters). Coaches move between groups, and siblings are often in different groups.
+- **Training is the everyday event.** Sessions happen on the hill (venue, discipline such as SL, GS, SG, or free skiing, and lane), in dryland, or at camps. Plans change at 6 a.m. because of weather, snow, or hill-space changes.
+- **Races are external.** Each athlete enters through the race organizer, usually on [adminskiracing.com](https://adminskiracing.com) or [Zone4](https://zone4.ca), with a US Ski & Snowboard license and a regional membership. Deadlines are strict and late fees are high. Start lists and results go on [live-timing.com](https://live-timing.com). Race documents often go out over WhatsApp.
+- **Race weekends are trips.** They involve multi-night travel, shared condos, carpools, chaperones, coach assignments, bib pickup, and arriving about 90 minutes before the start.
+- **Volunteering is required.** Families owe course crew and race-worker hours each season.
+- **Age class comes from birth year** (age as of December 31), and it changes every season.
+
+So the MVP is built around **a club with training groups**, and club features move from Phase 3 into the MVP. The core data model stays sport-neutral (organization, then groups, then members, then events with types), and ski racing is the first sport *profile* on top of it. That lets other club sports (swimming, Nordic, gymnastics) or ordinary teams come later without a rewrite.
+
+### Phase 1: MVP for ski clubs (web, installable PWA)
+
+The goal is that a ski club can run a full winter season on Team Rap, and parents would rather use it than TeamSnap plus WhatsApp plus spreadsheets.
+
+**Club, programs & groups**
+- Club workspace with branding (free, P5), plus a set of programs and training groups for each season
+- Athletes are placed in groups. Age class is computed from birth year, and a new season can roll athletes up a class in bulk
+- Coaches are assigned to one or more groups, and there are several admins and schedule editors
+- Bulk import of athletes and families from CSV or a pasted list, and CSV export that imports back cleanly (P13)
+- Archive a season and clone its structure for the next one
 
 **Accounts & identity**
-- Sign in with an email magic link, or with Google or Apple
-- Family/household accounts: one guardian manages several players, and a player can have more than one guardian
-- Roles per team: owner/manager, coach, player, guardian, and fan (read-only)
-- Invite by link, email, or SMS. Invitees can RSVP before creating an account (P7)
-- SMS-only and email-only members are full participants who need no app (P14)
-- Sign-in falls back to a one-time code when a magic link has expired
-- Self-serve account deletion and data export (P15). Hide or archive past teams from your own view
-- Opens to the current season's team, and remembers the last team you used
+- Sign in with an email magic link, or with Google or Apple. Sign-in falls back to a one-time code when a link expires
+- Family/household accounts: one login covers every child in every group and handles more than one guardian (P6)
+- Roles: club admin, head coach, coach, athlete (teen accounts optional), guardian, and read-only
+- Invite by link, email, or SMS. SMS-only and email-only members are full participants (P7, P14)
+- Self-serve account deletion and data export (P15). Opens to the current season
+- Athlete profile: emergency contacts and medical notes visible only to coaches. USSS license number and expiry date, with a reminder before it expires. Regional membership
 
-**Teams & roster**
-- Create a team with sport, season, colors, and logo (free branding, P5)
-- Roster with jersey number, positions, and guardian contacts
-- Bulk roster import from CSV or a pasted list, and CSV export that imports back cleanly (P13)
-- Privacy controls on contact info, which matters for youth teams. Minors' contact details are hidden by default
-- Archive a season, then clone it for the next one
+**Training schedule**
+- Training sessions per group: on-hill (venue, discipline, meeting spot, lane), dryland, and camps
+- Recurring sessions, with edit or delete for one session or the whole series
+- **Conditions update:** one tap sends "on, delayed, moved, or cancelled" to every affected group at once, as a high-priority alert with delivery tracking (P2). Made for 6 a.m. weather calls
+- Attendance and availability per session, with one-tap RSVP from email or SMS (P7) and nudges to people who haven't answered
+- Merged family calendar and ICS feeds that include meeting spot, discipline, and what to bring
 
-**Schedule**
-- Games, practices, and generic events, including recurring practices, with edit or delete for one event or the whole series
-- Locations with a map link, field or court notes, and arrival time
-- Home/away, opponent, and uniform color
-- Cancel or reschedule, which triggers a high-priority alert (P2)
-- ICS calendar feed per team and a merged feed per family. Feeds include arrival time, uniform, home/away, location notes, and snack duty, and update quickly
-- Times are stored with the venue's time zone
+**Race calendar & entries**
+- A club race calendar with each race's date, venue, disciplines, eligible age classes, entry deadline, and a link to the official entry page. Races can be added from a link to an adminskiracing or Zone4 event or from an iCal file, or entered by hand
+- **"Who's racing" tracker.** Each family marks "planning to race" and then "entered" for each athlete. Coaches see who is eligible, who is planning to race, and who has actually entered, and the app reminds people before the official deadline. Entry itself happens on the official site; Team Rap doesn't replace the race organizer in the MVP
+- Coach assignments per race, and bib pickup and captains' meeting reminders
+- Results links to live-timing.com on each race
 
-**Availability / RSVP**
-- Yes / No / Maybe with an optional note, per event
-- One-tap RSVP from the email or SMS link (P7)
-- Polite automatic reminders that keep going until the person answers ("RSVP missing"), with a configurable lead time
-- Coach view showing headcount by position and who hasn't answered
+**Trips & logistics**
+- A trip for each race weekend or camp, covering dates, departure, travel plan, and chaperones
+- Lodging: shared condos with room assignments and cost-share notes. Payment collection comes in Phase 2
+- Carpool sign-up and swap
+- A packing and equipment checklist for each trip (skis tuned, helmet, race suit, and so on)
+
+**Volunteers**
+- The club sets volunteer jobs (course crew, gatekeeper, timing, hospitality) and the hours each family owes
+- Sign-up per race or event, a running hours total per family, and reminders to families who are behind
 
 **Communication**
-- Admin-only announcement channel (one-way from managers and coaches). Replies to emailed announcements come back into the thread, and reply-all works
-- Team chat with real-time updates (P4), several named chats per team, adding and removing members, pinned messages, and reactions
-- One inbox that merges announcements, chat, and alerts
-- Notification center with per-user preferences, quiet hours, and a daily digest (P3). Noisy alert types can be muted without muting critical ones like cancellations
-- Delivery tracking with email or SMS fallback when push isn't confirmed (P2)
-
-**Assignments**
-- Snacks, carpools, and volunteer slots per event, with sign-up and swap
+- Club-wide and per-group admin-only announcement channels. Replies to emailed announcements come back into the thread, and reply-all works
+- Group, trip, and race chats with member management, pins, and reactions (P4). Race documents are attached in the chat instead of sent over WhatsApp
+- One inbox for announcements, chat, and alerts. Per-user preferences, quiet hours, and a digest (P3), with critical alerts like cancellations always delivered
+- Delivery tracking with email or SMS fallback (P2)
 
 **Platform**
-- Mobile-first responsive UI, installable as a PWA with web push
+- Mobile-first responsive UI, installable as a PWA with web push. Readable in the cold, on a phone, with gloves on: big tap targets and high contrast
 - No ads (P1), and no marketing email to invited members (P15)
-- Support: async in-app chat with a person, and a public status page (P12)
+- Support from a person through async in-app chat, and a public status page (P12)
 
-**Explicitly not in the MVP:** payments, registration, stats, media galleries, the league scheduler, and native apps.
+**Explicitly not in the MVP:** payments, club registration, entering races directly, live timing or results import, video, and native apps.
 
 ### Phase 2: Mobile and the money
 
 - **Native iOS and Android apps** (shared codebase), with the same features as web (P8)
-- **Payments**: team dues, fee splitting, payment reminders, and a ledger (Stripe Connect). Follows P11, so any fee is shown before checkout
-- **Files & photos**: attachments from any device, shared team albums, and bulk photo upload
-- **Game day**: lineup and rotation builder (with equal-playing-time helper for youth), live score updates, simple stats
-- **Attendance reports** across the season
-- **Multi-team dashboard** for coaches and parents with several teams
+- **Payments**: program fees, trip and lodging cost splits, race-fee reimbursements, and dues, with a ledger per family (Stripe Connect). Follows P11, so any fee is shown before checkout
+- **Club registration**: season sign-up for programs, waivers and e-signatures with downloadable PDFs, payment plans, and sibling discounts
+- **Results import**: pull each athlete's results from live-timing.com and USSS points lists into the profile, with a season history
+- **Files & media**: bulk photo upload and training video clips tagged to an athlete (on Pro if storage costs are high)
+- **Coach tools**: training plans per group, per-athlete notes and goals, and attendance reports
+- **Equipment**: tuning log, team gear orders, and a ski swap board
 
-### Phase 3: Clubs & leagues
+### Phase 3: Beyond the first ski clubs
 
-- Online registration forms, waivers and e-signatures, with discounts and payment plans. Admins can download signed waivers as PDFs. Pricing is all-in, with no surprise fees at checkout (P11)
-- Team-level invoicing, not only family by family
-- Roster players on and off for tournaments and seasons, and keep one athlete profile across seasons with de-duplication
-- Several schedule editors per team
-- A self-serve trial, so what buyers sign up for matches the demo
-- Org admin console: manage many teams, staff, and org-wide comms
-- **League scheduler**: auto-generate schedules around field availability, blackout dates, and conflicts
-- Public team and league pages (schedule, standings, results)
-- Compliance integrations: background checks, certifications, concussion and safety training tracking
-- Tournaments and brackets
-- Integrations: Google and Outlook two-way calendar, live streaming partners, accounting exports
+- **Race organizer tools**: host-club race registration with license checks, fees, start lists, and bib management. This competes with adminskiracing, so first confirm the demand
+- Regional and division views: multi-club race series calendars, published pricing for regions (P9)
+- Integrations with US Ski & Snowboard license verification (if an API or partnership exists), plus Google and Outlook two-way calendar
+- More sport profiles: Nordic, freestyle and snowboard, other club sports, then ordinary team sports (games, opponents, lineups)
+- Compliance tracking: SafeSport and coach certification expiry
+- Self-serve trial for clubs, so what buyers sign up for matches the demo
 
 ### Later ideas (unscheduled)
 
-- AI assistant for coaches: practice plans, "who can play Saturday?", schedule-change drafting
-- Carpool matching by location
+- AI assistant for coaches: "who's eligible and entered for Saturday's GS?", drafting trip plans and conditions updates
+- Carpool and condo matching by location
 - Fundraising and sponsor pages (opt-in, never ads in core flows)
-- Localization and multi-currency
+- Canada and Europe support (FIS, Alpine Canada), localization, and multi-currency
 
 ## 5. Monetization (decided 2026-10-29)
 
 - **MVP (Phase 1):** everything is free, with no ads. The goal is adoption.
 - **Phase 2, payments (main revenue):** a transparent fee on dues and other team payments, at or below Spond's US rate ($1.00 + 3.29%). The team chooses whether it absorbs the fee or passes it to families, and the fee is always shown before checkout (P11).
-- **Phase 2, Pro tier (about $5–9 per team per month, or about $49–79 a year):** only for features that cost Team Rap real money, such as SMS beyond the free allowance, the AI coach assistant, extra storage, and advanced stats. RSVP, availability, roster, chat, and branding stay free forever (P5). Billing is monthly or seasonal, and cancelling takes one click.
+- **Phase 2, Pro tier (about $5–9 per team per month, or about $49–79 a year; for ski clubs, priced per training group or per club, still to be set):** only for features that cost Team Rap real money, such as SMS beyond the free allowance, the AI coach assistant, extra storage, and advanced stats. RSVP, availability, roster, chat, and branding stay free forever (P5). Billing is monthly or seasonal, and cancelling takes one click.
 - **Phase 3, league and club plans:** published per-team pricing with no sales call (P9), plus registration fees under the same fee-transparency rule.
 - **Later, optional:** opt-in sponsorship and fundraising pages, never inside core flows and never targeting youth data.
 
@@ -176,12 +188,18 @@ Recommendation:
 1. ~~**Target audience**~~ **Decided 2026-10-29: youth teams first.** Parents and guardians are the primary users, so guardian accounts, privacy for minors, and snack/carpool assignments get MVP polish first. Adult rec leagues follow.
 2. ~~**Monetization**~~ **Decided 2026-10-29:** a payments margin plus a small Pro tier, with league plans later. See section 5.
 3. ~~**SMS**~~ **Mostly decided:** email and push are free, and SMS is in Pro, with a small free allowance per team. The exact cap is still to be set.
-4. **Sports focus:** should the MVP be sport-agnostic, or tuned to one or two sports first?
+4. ~~**Sports focus**~~ **Decided 2026-10-29:** alpine ski racing clubs first, on a sport-neutral core.
+   - **What breaks in TeamSnap for your daughter's club?** Your specific pain points will set MVP priorities.
+   - **Pro pricing unit for clubs:** per training group, per athlete, or a flat price per club?
 5. **Geography:** US-only at launch, or international?
 6. **Support commitment:** P12 promises a person replies within one business day. Can you staff that at launch, or should the promise start smaller?
 7. **Tech stack:** are you OK with the TypeScript / Next.js / Postgres direction, or do you prefer something else?
 
 ## Sources
+
+- [Wintergreen ski race parents guide](https://www.wintergreenresort.com/wp-content/uploads/2023/05/Ski_Race_Parents_Guide.pdf)
+- [How your ski club pulls off a training day (Ski Racing)](https://skiracing.com/how-your-ski-club-pulls-off-a-training-day/)
+- [Example race entry: U14+ Open Series on adminskiracing.com](https://adminskiracing.com/event/223)
 
 - [TeamSnap pain-points research report](../research/teamsnap-pain-points.md), which has the full source list
 
