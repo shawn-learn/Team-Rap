@@ -1,6 +1,6 @@
 # Team Rap: Feature Set Plan
 
-Status: **Draft for review** (2026-10-29). Updated with the [pain-points research](../research/teamsnap-pain-points.md); audience decided: **youth teams first**; launch sport: **alpine ski racing clubs**. Restructured 2026-10-30 into a release schedule (R1 to R6).
+Status: **Draft for review** (2026-10-29). Updated with the [pain-points research](../research/teamsnap-pain-points.md); audience decided: **youth teams first**; launch sport: **alpine ski racing clubs**. Restructured 2026-10-30 into a release schedule (R1 to R7), with the mobile app as its own release, R2.
 
 Team Rap is a team management app in the same space as TeamSnap, and it aims to be clearly better. Release 1 is a lean web MVP that replaces TeamSnap's core, and later releases add the rest. A native mobile app comes later, so the architecture is API-first from day one.
 
@@ -82,17 +82,18 @@ The core data model is sport-neutral (organization, then groups, then members, t
 - **Each release ships on its own and is usable as-is.** No release depends on a later one to be worth using.
 - **Each release has a goal and an exit test.** The next release starts once the exit test passes, so scope doesn't grow mid-release.
 - **The principles in section 3 apply from Release 1.** Most cost nothing (no ads, no spam, account deletion). Ones that are expensive, such as the support promise and SMS, scale up with later releases.
-- **Release 1 is web only (an installable PWA).** The native app is Release 3.
+- **Release 1 is web only (an installable PWA).** The native app is its own release, R2, and every release after it ships on web and mobile together.
 - **Timing is a proposal.** It's tied to the ski calendar (season roughly December to April), not to fixed dates. Shawn to confirm.
 
 | Release | Theme | Proposed timing |
 |---|---|---|
 | **R1** | True MVP: replace TeamSnap's core | Build over winter 2026–27, pilot with one club late in the 2026–27 season |
-| **R2** | Ski club essentials | Ready for the start of the 2027–28 season (fall 2027) |
-| **R3** | Mobile apps and payments | During the 2027–28 season |
-| **R4** | Club admin and registration | Before 2028–29 registration opens (summer 2028) |
-| **R5** | Coaching and training | 2028–29 season |
-| **R6** | Expansion | 2029 onward |
+| **R2** | Mobile apps (iOS and Android) | Spring to summer 2027, ready before the 2027–28 season |
+| **R3** | Ski club essentials | Start of the 2027–28 season (fall 2027) |
+| **R4** | Payments and Pro | During the 2027–28 season |
+| **R5** | Club admin and registration | Before 2028–29 registration opens (summer 2028) |
+| **R6** | Coaching and training | 2028–29 season |
+| **R7** | Expansion | 2029 onward |
 
 ---
 
@@ -116,7 +117,20 @@ The core data model is sport-neutral (organization, then groups, then members, t
 
 **Exit test:** one pilot club runs a month or more of the season on Team Rap without falling back to TeamSnap, and parents rate it at least as easy to use.
 
-### R2: Ski club essentials
+### R2: Mobile apps
+
+**Goal:** native iOS and Android apps with every R1 feature, so families who expect an app (as with TeamSnap) aren't asked to use a web app.
+
+- **iOS and Android apps** (React Native / Expo) built on the same API as the web app, with the same features as R1 (P8)
+- **Native push** with delivery tracking, falling back to email
+- Sign in with Google or Apple, and stay signed in
+- Calendar and share-sheet integration (add an event to the phone calendar, share a session)
+- Offline read of the schedule and roster, for spotty signal at the ski hill
+- App Store and Google Play listings, with no ads and no in-app upsell to parents
+
+**Exit test:** most active families at the pilot club use the app, and nothing in R1 is web-only.
+
+### R3: Ski club essentials
 
 **Goal:** handle what TeamSnap doesn't do for ski clubs, which is races, trips, and volunteers.
 
@@ -131,17 +145,16 @@ The core data model is sport-neutral (organization, then groups, then members, t
 
 **Exit test:** the pilot club runs its race weekends and volunteer tracking on Team Rap, and a second club signs on.
 
-### R3: Mobile apps and payments
+### R4: Payments and Pro
 
-**Goal:** native apps with every feature the web has, and the first revenue.
+**Goal:** the first revenue.
 
-- **iOS and Android apps** (React Native / Expo), with the same features as web, plus native push
 - **Payments:** trip and lodging cost splits, race-fee reimbursements, and club dues, with any fee shown before checkout (Stripe Connect)
 - **Pro tier launch:** SMS beyond the free allowance, plus extra storage
 
-**Exit test:** most active families use the app, and payments are moving through it.
+**Exit test:** payments are moving through the app at the pilot clubs.
 
-### R4: Club admin and registration
+### R5: Club admin and registration
 
 **Goal:** the club runs its season sign-up on Team Rap.
 
@@ -152,7 +165,7 @@ The core data model is sport-neutral (organization, then groups, then members, t
 - Equipment: tuning log, team gear orders, and a ski swap board
 - Compliance tracking for coach certifications and SafeSport
 
-### R5: Coaching and training
+### R6: Coaching and training
 
 **Goal:** go beyond logistics and help athletes improve.
 
@@ -162,7 +175,7 @@ The core data model is sport-neutral (organization, then groups, then members, t
 - Athlete goals, coach notes, and progress over the season
 - **AI coach assistant:** answers questions like "who's eligible and entered for Saturday's GS?", and drafts training plans and conditions updates (Pro)
 
-### R6: Expansion
+### R7: Expansion
 
 - More sport profiles: Nordic, freestyle and snowboard, other club sports, then ordinary team sports
 - Tools for clubs that host races (registration, start lists, bibs), only if demand is confirmed
@@ -172,10 +185,10 @@ The core data model is sport-neutral (organization, then groups, then members, t
 
 ## 5. Monetization (decided 2026-10-29)
 
-- **R1–R2:** everything is free, with no ads. The goal is adoption. SMS has a small free allowance starting in R2.
-- **R3, payments (main revenue):** a transparent fee on dues and other team payments, at or below Spond's US rate ($1.00 + 3.29%). The team chooses whether it absorbs the fee or passes it to families, and the fee is always shown before checkout (P11).
-- **R3 onward, Pro tier (about $5–9 per team per month, or about $49–79 a year; for ski clubs, priced per training group or per club, still to be set):** only for features that cost Team Rap real money, such as SMS beyond the free allowance, the AI coach assistant, extra storage, and advanced stats. RSVP, availability, roster, chat, and branding stay free forever (P5). Billing is monthly or seasonal, and cancelling takes one click.
-- **R4 onward, club plans:** published per-team pricing with no sales call (P9), plus registration fees under the same fee-transparency rule.
+- **R1–R3:** everything is free, with no ads. The goal is adoption. SMS has a small free allowance starting in R3.
+- **R4, payments (main revenue):** a transparent fee on dues and other team payments, at or below Spond's US rate ($1.00 + 3.29%). The team chooses whether it absorbs the fee or passes it to families, and the fee is always shown before checkout (P11).
+- **R4 onward, Pro tier (about $5–9 per team per month, or about $49–79 a year; for ski clubs, priced per training group or per club, still to be set):** only for features that cost Team Rap real money, such as SMS beyond the free allowance, the AI coach assistant, extra storage, and advanced stats. RSVP, availability, roster, chat, and branding stay free forever (P5). Billing is monthly or seasonal, and cancelling takes one click.
+- **R5 onward, club plans:** published per-team pricing with no sales call (P9), plus registration fees under the same fee-transparency rule.
 - **Later, optional:** opt-in sponsorship and fundraising pages, never inside core flows and never targeting youth data.
 
 Source: section 8 of `/mnt/project-files/research/market-research.md`.
