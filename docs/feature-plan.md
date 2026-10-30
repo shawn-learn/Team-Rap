@@ -109,6 +109,7 @@ The core data model is sport-neutral (organization, then groups, then members, t
 - **Cancel or change alert:** one action notifies every affected group, as high-priority
 - **Availability:** Yes / No / Maybe per event, one-tap reply from the email link without logging in, and a coach view of who hasn't answered
 - **Messaging:** club and group announcements that only coaches and admins can post, plus simple group chat
+- **Who can message (club setting):** by default, only parents/guardians, coaches, and admins can chat, which matches how clubs like NASA run TeamSnap today. Athletes can still read announcements and see their schedule. A club can turn on athlete chat per group, for example for U16 and older, and decide whether athletes chat only in coach-supervised group chats. Athletes can never send private one-to-one messages to adults, which follows SafeSport-style youth messaging rules
 - **Notifications:** email and web push, per-user preferences, and alerts that can't be muted for cancellations
 - **Calendar:** ICS feed per group and a merged feed per family
 - **No ads,** and no marketing email to invited members
